@@ -6,16 +6,21 @@ import me.zeroeightsix.kami.seedCracker.Structures.Village;
 import me.zeroeightsix.kami.seedCracker.finder.Searcher;
 import me.zeroeightsix.kami.util.text.MessageSendHelper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.init.Biomes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 import net.minecraft.world.biome.BiomeProviderSingle;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.ChunkGeneratorSettings;
 import net.minecraft.world.gen.layer.GenLayer;
+import net.minecraft.world.gen.layer.IntCache;
 import net.minecraft.world.storage.WorldInfo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.function.BiConsumer;
 
 @SuppressWarnings("BusyWait")
 public class SeedCracker extends Thread{
@@ -30,15 +35,15 @@ public class SeedCracker extends Thread{
     StructureSeeds structureSeedFinder = null;
     Pillars pillars;
     List<Long> structureSeeds = new ArrayList<>();
+    List<Integer[]> biomePositions = new ArrayList<>(); // {Biome, posx, posy}
 Minecraft mc = Minecraft.getMinecraft();
     public void waitForPillarSeed(){
-        BiomeProvider biomeProvider = new BiomeProvider(mc.world.getSeed());
+        biomePositions.add(new Integer[]{33,0,0});
+        biomePositions.add(new Integer[]{2,-167,-2452});
+        biomePositions.add(new Integer[]{0,-510,117});
         while(!searcher.ping()){
-            try {
+                try {
                 Thread.sleep(50);
-                BlockPos playerPos = Minecraft.getMinecraft().player.getPosition();
-                System.out.println(biomeProvider.getBiome(playerPos).getBiomeName());
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -96,18 +101,36 @@ Minecraft mc = Minecraft.getMinecraft();
                 e.printStackTrace();
             }
         }
-
-        for (long structureSeed:structureSeeds
-             ) {
-            for (long i = 0; i < 1<<16; i++) {
-                long seedToTest = (i<<48) | structureSeed;
-                //Why do you complain, the last option is not "notNull"
-                GenLayer intLayer = GenLayer.initializeAllBiomeGenerators(seedToTest, WorldType.DEFAULT,null)[1];
-                BlockPos playerPos = Minecraft.getMinecraft().player.getPosition();
-                intLayer.getInts(playerPos.getX(), playerPos.getZ(),1,1);
+new Thread(() -> {
+    for (
+        long structureSeed : structureSeeds
+    ) {
+        MessageSendHelper.sendChatMessage(String.format("Searching with %d structure seed", structureSeed));
+        for (long i = 0; i < 1 << 16; i++) {
+            long seedToTest = (i << 48) | structureSeed;
+            System.out.println(seedToTest);
+            if (testBiome(seedToTest)) {
+                MessageSendHelper.sendChatMessage(String.format("Yay, possible seed found %d", seedToTest));
             }
-        }
 
+        }
+    }
+}).start();
+
+   }
+
+   public boolean testBiome(long seed){
+       GenLayer intLayer = GenLayer.initializeAllBiomeGenerators(seed, null,null)[1];
+       for (Integer[] ints: biomePositions
+       ) {
+           if(intLayer.getInts(ints[1], ints[2],1,1)[0] != ints[0]){
+               return false;
+           }
+       }
+       if(seed % (1L<<10) == 0){
+           System.out.println(Long.toBinaryString(seed));
+       }
+       return true;
    }
 
     public long timeMachine(long currentSeed, int steps)
@@ -130,6 +153,6 @@ Minecraft mc = Minecraft.getMinecraft();
     }
 
     public synchronized void getDataFromChunk(Chunk chunk){
-        searcher.getDataFromChunk(chunk);
+       // searcher.getDataFromChunk(chunk);
     }
 }
