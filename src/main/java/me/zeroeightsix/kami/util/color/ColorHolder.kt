@@ -13,6 +13,8 @@ data class ColorHolder(
 
     constructor(color: Color) : this(color.red, color.green, color.blue, color.alpha)
 
+    constructor(hex : Int) : this(hex shr 16 and 0xFF, hex shr 8 and 0xFF, hex and 0xFF)
+
     val brightness get() = intArrayOf(r, g, b).maxOrNull()!!.toFloat() / 255f
 
     val averageBrightness get() = (intArrayOf(r, g, b).average() / 255.0).toFloat()
