@@ -12,8 +12,8 @@ var layers : GenLayer = BiomeGen().initializeAllBiomeGenerators(seed, WorldType.
     var data : MutableList<MappedChunk> = ArrayList()
 
     init {
-        for (x in 0..5){
-            for (y in 0..5){
+        for (x in 0..8){
+            for (y in 0..6){
                 data.add(MappedChunk(x,y,layers))
             }
         }
@@ -21,7 +21,6 @@ var layers : GenLayer = BiomeGen().initializeAllBiomeGenerators(seed, WorldType.
 
     fun render(){
         val size = 50.0
-
         for (x in data){
                 x.render(Vec2d(x.chunkX.toDouble() * size,x.chunkY.toDouble() * size),size)
         }
