@@ -7,32 +7,53 @@ import me.zeroeightsix.kami.util.graphics.GlStateUtils
 import me.zeroeightsix.kami.util.graphics.RenderUtils2D
 import me.zeroeightsix.kami.util.graphics.VertexHelper
 import me.zeroeightsix.kami.util.math.Vec2d
-import net.minecraft.world.biome.BiomeProvider
 import net.minecraft.world.gen.layer.GenLayer
+import net.minecraft.world.gen.layer.IntCache
+
 
 class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
-    val defaultColor = ColorHolder(0,0,0,0)//Completely see-through
-    var colours : IntArray = IntArray(256)
+    var colours : IntArray = IntCache.getIntCache(0)
+    var singleColor = false
+    var colorIfSingle = 0
 
     init {
-        colours =  layers.getInts((chunkX shl 4),(chunkY shl 4),16,16)
+        val colorsToCheck = layers.getInts((chunkX shl 4),(chunkY shl 4),16,16)
+        val first = colorsToCheck[0]
+        if(colorsToCheck.all{ i -> i == first}){
+            singleColor = true
+            colorIfSingle = first
+        }else {
+            colours = colorsToCheck
+        }
     }
 
 
     fun render( startPos : Vec2d, size : Double){
         val vertexHelper = VertexHelper(GlStateUtils.useVbo())
-        for ( x in 0..15){
-            for (y in 0..15){
-                val colorToDraw : ColorHolder = Colours.colours.getOrDefault(colours[x + (y shl 4)], defaultColor)
+        if (!singleColor) {
+            for (x in 0..15) {
+                for (y in 0..15) {
+                    val colorToDraw: ColorHolder = Colours.getColor(colours[x + (y shl 4)])
 
-                MapGui.drawRect(startPos.x + (x * (size / 16)), startPos.y + (y * (size / 16)),
-                    startPos.x + ((x + 1) * (size / 16)), startPos.y + ((y + 1) * (size / 16)),
-                    colorToDraw)
+                    MapGui.drawRect(startPos.x + (x * (size / 16)), startPos.y + (y * (size / 16)),
+                        startPos.x + ((x + 1) * (size / 16)), startPos.y + ((y + 1) * (size / 16)),
+                        colorToDraw)
+                }
             }
-        }
-        val colour = ColorHolder(255,0,0)
-        RenderUtils2D.drawRectOutline(vertexHelper, Vec2d(startPos.x, startPos.y),Vec2d(startPos.x + size, startPos.y + size),
-            size.toFloat()/20, colour)
+        }else{
+            RenderUtils2D.drawRectFilled(vertexHelper, Vec2d(startPos.x, startPos.y), Vec2d(startPos.x + size, startPos.y + size), Colours.getColor(colorIfSingle))
 
+        }
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(other is MappedChunk){
+            return (this.chunkX == other.chunkX) and (this.chunkY == other.chunkY)
+        }
+
+        return false
+    }
+
+    fun destroy(){
     }
 }

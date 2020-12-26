@@ -71,9 +71,12 @@ object Colours {
         colours.put(165, ColorHolder(0xFF6D3D))
         colours.put(166, ColorHolder(0xD8DF8D))
         colours.put(167, ColorHolder(0xF2B48D))
+    }
 
-
-
-
+    fun getColor(id : Int): ColorHolder{
+        if (id < 256){
+            return colours.getOrDefault(id, ColorHolder(0,0,0,0))
+        }
+        return ColorHolder(0,0,0,0)
     }
 }
