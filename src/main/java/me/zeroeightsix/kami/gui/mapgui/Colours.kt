@@ -5,7 +5,7 @@ import net.minecraft.world.biome.Biome
 
 
 object Colours {
-    var colours : MutableMap<Int, ColorHolder> = HashMap()
+    var colours : MutableMap<Short, ColorHolder> = HashMap()
     //Biome colors are 0 - 170
     //Hopefully none of these are wrong. Colours sourced from https://minecraft.gamepedia.com/Biome/IDs_before_1.13
     init {
@@ -73,7 +73,7 @@ object Colours {
         colours.put(167, ColorHolder(0xF2B48D))
     }
 
-    fun getColor(id : Int): ColorHolder{
+    fun getColor(id : Short): ColorHolder{
         if (id < 256){
             return colours.getOrDefault(id, ColorHolder(0,0,0,0))
         }

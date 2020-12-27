@@ -17,11 +17,12 @@ object Mapping : Module() {
   
 
     override fun onEnable() {
-        MapRenderer.init()
-        if (mc.currentScreen !is MapGui) {
-            HudEditor.disable()
-            mc.displayGuiScreen(MapGui)
-            KamiEventBus.subscribe(MapGui)
+        if(mc.world != null){
+            if (mc.currentScreen !is MapGui) {
+                HudEditor.disable()
+                mc.displayGuiScreen(MapGui)
+                KamiEventBus.subscribe(MapGui)
+            }
         }
     }
 

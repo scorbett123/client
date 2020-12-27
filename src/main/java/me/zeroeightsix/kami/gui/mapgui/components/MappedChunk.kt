@@ -12,18 +12,21 @@ import net.minecraft.world.gen.layer.IntCache
 
 
 class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
-    var colours : IntArray = IntCache.getIntCache(0)
+    var colours : ShortArray = ShortArray(0)
     var singleColor = false
-    var colorIfSingle = 0
+    var colorIfSingle : Short = 0
 
     init {
         val colorsToCheck = layers.getInts((chunkX shl 4),(chunkY shl 4),16,16)
         val first = colorsToCheck[0]
         if(colorsToCheck.all{ i -> i == first}){
             singleColor = true
-            colorIfSingle = first
+            colorIfSingle = first.toShort()
         }else {
-            colours = colorsToCheck
+            colours = ShortArray(256)
+            for (i in colorsToCheck.indices){
+                colours[i] = colorsToCheck[i].toShort()
+            }
         }
     }
 
@@ -50,10 +53,12 @@ class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
         if(other is MappedChunk){
             return (this.chunkX == other.chunkX) and (this.chunkY == other.chunkY)
         }
-
         return false
     }
 
-    fun destroy(){
+    override fun hashCode(): Int {
+        var result = chunkX
+        result = 31 * result + chunkY
+        return result
     }
 }

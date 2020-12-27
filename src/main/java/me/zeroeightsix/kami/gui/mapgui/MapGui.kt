@@ -8,6 +8,7 @@ import me.zeroeightsix.kami.util.graphics.GlStateUtils
 import me.zeroeightsix.kami.util.graphics.RenderUtils2D
 import me.zeroeightsix.kami.util.graphics.VertexHelper
 import me.zeroeightsix.kami.util.math.Vec2d
+import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
 import net.minecraft.world.gen.structure.MapGenVillage
 
@@ -33,12 +34,18 @@ object MapGui : GuiScreen() {
 
     override fun initGui() {
         super.initGui()
+        MapRenderer.init()
     }
 
     override fun onGuiClosed() {
         super.onGuiClosed()
         if(Mapping.isEnabled)
             Mapping.disable()
+    }
+
+    override fun onResize(mcIn: Minecraft, w: Int, h: Int) {
+        super.onResize(mcIn, w, h)
+        MapRenderer.updateSize(0,0, mc.displayWidth, mc.displayHeight)
     }
 
     fun drawRect(startX : Double, startY : Double, endX : Double, endY : Double, colour : ColorHolder ){
