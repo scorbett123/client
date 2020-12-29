@@ -2,13 +2,13 @@ package me.zeroeightsix.kami.gui.mapgui.components
 
 import me.zeroeightsix.kami.gui.mapgui.Colours
 import me.zeroeightsix.kami.gui.mapgui.MapGui
+import me.zeroeightsix.kami.seed.layer.GenLayer
+import me.zeroeightsix.kami.seed.layer.IntCache
 import me.zeroeightsix.kami.util.color.ColorHolder
 import me.zeroeightsix.kami.util.graphics.GlStateUtils
 import me.zeroeightsix.kami.util.graphics.RenderUtils2D
 import me.zeroeightsix.kami.util.graphics.VertexHelper
 import me.zeroeightsix.kami.util.math.Vec2d
-import net.minecraft.world.gen.layer.GenLayer
-import net.minecraft.world.gen.layer.IntCache
 
 
 class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
@@ -28,6 +28,7 @@ class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
                 colours[i] = colorsToCheck[i].toShort()
             }
         }
+        IntCache.resetIntCache()
     }
 
 

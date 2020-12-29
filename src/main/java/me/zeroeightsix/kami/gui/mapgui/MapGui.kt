@@ -1,7 +1,6 @@
 package me.zeroeightsix.kami.gui.mapgui
 
 import me.zeroeightsix.kami.gui.mapgui.components.MapRenderer
-import me.zeroeightsix.kami.module.ModuleManager
 import me.zeroeightsix.kami.module.modules.client.Mapping
 import me.zeroeightsix.kami.util.color.ColorHolder
 import me.zeroeightsix.kami.util.graphics.GlStateUtils
@@ -10,7 +9,6 @@ import me.zeroeightsix.kami.util.graphics.VertexHelper
 import me.zeroeightsix.kami.util.math.Vec2d
 import net.minecraft.client.Minecraft
 import net.minecraft.client.gui.GuiScreen
-import net.minecraft.world.gen.structure.MapGenVillage
 
 object MapGui : GuiScreen() {
 
@@ -35,6 +33,8 @@ object MapGui : GuiScreen() {
     override fun initGui() {
         super.initGui()
         MapRenderer.init()
+
+        MapRenderer.updateSize(0,0, mc.displayWidth, mc.displayHeight)
     }
 
     override fun onGuiClosed() {

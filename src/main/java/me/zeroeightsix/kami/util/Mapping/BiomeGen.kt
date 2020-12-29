@@ -1,8 +1,8 @@
 package me.zeroeightsix.kami.util.Mapping
 
+import me.zeroeightsix.kami.seed.layer.*
 import net.minecraft.world.WorldType
 import net.minecraft.world.gen.ChunkGeneratorSettings
-import net.minecraft.world.gen.layer.*
 
 class BiomeGen {
     //Done this otherwise It thinks that ChunkGeneratorSettings are NotNull, therefore it crashes.
