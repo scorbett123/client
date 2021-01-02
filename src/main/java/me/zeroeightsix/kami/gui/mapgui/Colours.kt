@@ -1,11 +1,10 @@
 package me.zeroeightsix.kami.gui.mapgui
 
 import me.zeroeightsix.kami.util.color.ColorHolder
-import net.minecraft.world.biome.Biome
 
 
 object Colours {
-    var colours : MutableMap<Short, ColorHolder> = HashMap()
+    var colours : MutableMap<Byte, ColorHolder> = HashMap()
     //Biome colors are 0 - 170
     //Hopefully none of these are wrong. Colours sourced from https://minecraft.gamepedia.com/Biome/IDs_before_1.13
     init {
@@ -50,30 +49,30 @@ object Colours {
         colours.put(38, ColorHolder(0xB09765))
         colours.put(39, ColorHolder(0xCA8C65))
 
-        colours.put(129, ColorHolder(0xB5DB88))
-        colours.put(130, ColorHolder(0xFFBC40))
-        colours.put(131, ColorHolder(0x888888))
-        colours.put(132, ColorHolder(0x6A7425))
-        colours.put(133, ColorHolder(0x596651))
-        colours.put(134, ColorHolder(0x2FFFDA))
-        colours.put(140, ColorHolder(0xB4DCDC))
-        colours.put(149, ColorHolder(0x7BA331))
-        colours.put(151, ColorHolder(0x8AB33F))
-        colours.put(155, ColorHolder(0x589C6C))
-        colours.put(156, ColorHolder(0x47875A))
-        colours.put(157, ColorHolder(0x687942))
-        colours.put(158, ColorHolder(0x597D72))
-        colours.put(160, ColorHolder(0x6B5F4C))
-        colours.put(161, ColorHolder(0x6D7766))
-        colours.put(162, ColorHolder(0x789878))
-        colours.put(163, ColorHolder(0xE5DA87))
-        colours.put(164, ColorHolder(0xCFC58C))
-        colours.put(165, ColorHolder(0xFF6D3D))
-        colours.put(166, ColorHolder(0xD8DF8D))
-        colours.put(167, ColorHolder(0xF2B48D))
+        colours.put(129.toByte(), ColorHolder(0xB5DB88))
+        colours.put(130.toByte(), ColorHolder(0xFFBC40))
+        colours.put(131.toByte(), ColorHolder(0x888888))
+        colours.put(132.toByte(), ColorHolder(0x6A7425))
+        colours.put(133.toByte(), ColorHolder(0x596651))
+        colours.put(134.toByte(), ColorHolder(0x2FFFDA))
+        colours.put(140.toByte(), ColorHolder(0xB4DCDC))
+        colours.put(149.toByte(), ColorHolder(0x7BA331))
+        colours.put(151.toByte(), ColorHolder(0x8AB33F))
+        colours.put(155.toByte(), ColorHolder(0x589C6C))
+        colours.put(156.toByte(), ColorHolder(0x47875A))
+        colours.put(157.toByte(), ColorHolder(0x687942))
+        colours.put(158.toByte(), ColorHolder(0x597D72))
+        colours.put(160.toByte(), ColorHolder(0x6B5F4C))
+        colours.put(161.toByte(), ColorHolder(0x6D7766))
+        colours.put(162.toByte(), ColorHolder(0x789878))
+        colours.put(163.toByte(), ColorHolder(0xE5DA87))
+        colours.put(164.toByte(), ColorHolder(0xCFC58C))
+        colours.put(165.toByte(), ColorHolder(0xFF6D3D))
+        colours.put(166.toByte(), ColorHolder(0xD8DF8D))
+        colours.put(167.toByte(), ColorHolder(0xF2B48D))
     }
 
-    fun getColor(id : Short): ColorHolder{
+    fun getColor(id : Byte): ColorHolder{
         if (id < 256){
             return colours.getOrDefault(id, ColorHolder(0,0,0,0))
         }

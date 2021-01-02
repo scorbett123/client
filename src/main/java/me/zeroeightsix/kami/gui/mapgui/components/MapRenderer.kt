@@ -2,9 +2,7 @@ package me.zeroeightsix.kami.gui.mapgui.components
 
 import me.zeroeightsix.kami.gui.mapgui.MapGui
 import me.zeroeightsix.kami.module.modules.client.GuiColors
-import me.zeroeightsix.kami.module.modules.client.Mapping
 import me.zeroeightsix.kami.seed.layer.GenLayer
-import me.zeroeightsix.kami.util.Mapping.BiomeGen
 import me.zeroeightsix.kami.util.math.Vec2d
 import net.minecraft.client.Minecraft
 import net.minecraft.util.math.ChunkPos
@@ -12,30 +10,28 @@ import net.minecraft.world.WorldType
 
 object MapRenderer{
     var seed : Long = 4892758963420916476L
-    var layers : GenLayer = BiomeGen().initializeAllBiomeGenerators(seed, WorldType.DEFAULT, null)[1]
-    var data : ChunkList = ChunkList()
+    var layers : GenLayer = GenLayer.initializeAllBiomeGenerators(seed, WorldType.DEFAULT, null)[1]
+    var data : RegionList = RegionList()
     var centerPos : ChunkPos = ChunkPos(0,0)
     var currentThread : Thread? = null
-    var ySize : Int = 100
-    var xSize : Int = 120
+    var ySize : Int = 2
+    var xSize : Int = 2
     var renderSizeX : Int = 250
     var renderSizeY: Int = 250
     var renderPosX: Int = 200
     var renderPosY: Int = 200
 
     var mapGen : Runnable = Runnable {
-        while(Mapping.isEnabled) {
             for (x in -(xSize/2)..(xSize/2)) {
                 for (y in -(ySize/2)..(ySize/2)) {
-                    if(data.doesContainChunk(x+ centerPos.x,
+                    if(data.doesContainRegion(x+ centerPos.x,
                             y + centerPos.z)){
                         continue
                     }
-                    val chunk = MappedChunk(x+ centerPos.x,
+                    val chunk = MappedRegion(x+ centerPos.x,
                         y + centerPos.z, layers)
                     data.add(chunk)
                 }
-            }
         }
     }
 
@@ -58,15 +54,16 @@ object MapRenderer{
         MapGui.drawRect(x - borderDistX, y - borderDistY,
             x + borderDistX + size, y + borderDistY + size,
             GuiColors.primary)
-        val iterator : MutableList<MappedChunk> = ArrayList()
-        iterator.addAll(data) //Do this to stop concurrent modification errors
-        for( i in iterator){
-                val posX =x+((i.chunkX - centerPos.x).toDouble() * size)
-                val posY = y+((i.chunkY - centerPos.z).toDouble() * size)
-                if((posX > renderPosX) and (posY > renderPosY) and (posX < renderPosX + renderSizeX) and (posY < renderPosY + renderSizeY) )
-                i.render(Vec2d(posX, posY),size)
-        }
+        try {
+            for (i in data) {
+                val posX = x + ((i.posX - centerPos.x).toDouble() * size)
+                val posY = y + ((i.posY - centerPos.z).toDouble() * size)
 
+                i.render(Vec2d(posX, posY), (size / 32).toFloat())
+            }
+        }catch(e : ConcurrentModificationException){
+            println("ConcurrentModification")
+        }
     }
 
     fun setBiomeSeed(seed : Long){

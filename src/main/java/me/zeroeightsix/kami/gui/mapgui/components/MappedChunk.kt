@@ -12,23 +12,24 @@ import me.zeroeightsix.kami.util.math.Vec2d
 
 
 class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
-    var colours : ShortArray = ShortArray(0)
+    var colours : ByteArray = ByteArray(0)
     var singleColor = false
-    var colorIfSingle : Short = 0
+    var colorIfSingle : Byte = 0
 
     init {
         val colorsToCheck = layers.getInts((chunkX shl 4),(chunkY shl 4),16,16)
         val first = colorsToCheck[0]
         if(colorsToCheck.all{ i -> i == first}){
             singleColor = true
-            colorIfSingle = first.toShort()
+            colorIfSingle = first.toByte()
         }else {
-            colours = ShortArray(256)
+            colours = ByteArray(256)
             for (i in colorsToCheck.indices){
-                colours[i] = colorsToCheck[i].toShort()
+                colours[i] = colorsToCheck[i].toByte()
             }
         }
         IntCache.resetIntCache()
+
     }
 
 
@@ -62,4 +63,5 @@ class MappedChunk(var chunkX : Int, var chunkY : Int, var layers : GenLayer ) {
         result = 31 * result + chunkY
         return result
     }
+
 }
