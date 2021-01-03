@@ -4,14 +4,16 @@ import com.google.gson.JsonParser
 import kotlinx.coroutines.launch
 import me.zeroeightsix.kami.KamiMod
 import me.zeroeightsix.kami.util.WebUtils
+import me.zeroeightsix.kami.util.Wrapper.minecraft
 import me.zeroeightsix.kami.util.color.ColorConverter
 import me.zeroeightsix.kami.util.threads.mainScope
-import net.minecraft.client.gui.*
+import net.minecraft.client.gui.GuiButton
+import net.minecraft.client.gui.GuiScreen
 import net.minecraft.util.text.TextFormatting
 import org.kamiblue.commons.utils.ConnectionUtils
 import java.io.IOException
 
-class KamiGuiUpdateNotification(private val buttonId: Int) : GuiScreen() {
+class KamiGuiUpdateNotification(private val nextGui: GuiScreen) : GuiScreen() {
 
     private val message = "A newer release of KAMI Blue is available ($latest)."
 
@@ -32,10 +34,7 @@ class KamiGuiUpdateNotification(private val buttonId: Int) : GuiScreen() {
     override fun actionPerformed(button: GuiButton) {
         if (button.id == 0) WebUtils.openWebLink(KamiMod.WEBSITE_LINK + "/download")
 
-        val screen = if (buttonId == 1) GuiWorldSelection(GuiMainMenu()) // Single
-        else GuiMultiplayer(GuiMainMenu()) // Multi
-
-        mc.displayGuiScreen(screen)
+        mc.displayGuiScreen(nextGui)
     }
 
     companion object {
@@ -43,6 +42,17 @@ class KamiGuiUpdateNotification(private val buttonId: Int) : GuiScreen() {
 
         var latest: String? = null // latest version (null if no internet or exception occurred)
         var isLatest = false
+        var hasAskedToUpdate = false
+
+        @JvmStatic
+        fun shouldOpen(screen: GuiScreen) : Boolean{
+            if (!hasAskedToUpdate) {
+                minecraft.displayGuiScreen(KamiGuiUpdateNotification(screen))
+                hasAskedToUpdate = true
+                return true
+            }
+            return false
+        }
 
         @JvmStatic
         fun updateCheck() {

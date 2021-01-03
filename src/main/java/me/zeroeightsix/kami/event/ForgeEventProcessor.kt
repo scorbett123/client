@@ -3,11 +3,14 @@ package me.zeroeightsix.kami.event
 import me.zeroeightsix.kami.command.CommandManager
 import me.zeroeightsix.kami.event.events.*
 import me.zeroeightsix.kami.gui.mc.KamiGuiChat
+import me.zeroeightsix.kami.gui.mc.KamiGuiUpdateNotification
 import me.zeroeightsix.kami.module.ModuleManager
 import me.zeroeightsix.kami.util.Wrapper
 import me.zeroeightsix.kami.util.graphics.KamiTessellator
 import me.zeroeightsix.kami.util.graphics.ProjectionUtils
 import me.zeroeightsix.kami.util.text.MessageDetection
+import net.minecraft.client.gui.GuiMultiplayer
+import net.minecraft.client.gui.GuiWorldSelection
 import net.minecraftforge.client.event.*
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent
 import net.minecraftforge.event.entity.player.AttackEntityEvent
@@ -161,5 +164,14 @@ object ForgeEventProcessor {
     @Suppress("UNUSED_PARAMETER")
     fun onClientConnect(event: FMLNetworkEvent.ClientConnectedToServerEvent) {
         KamiEventBus.post(ConnectionEvent.Connect())
+    }
+
+    @SubscribeEvent
+    fun guiOpenEvent(event: GuiOpenEvent) {
+        println("Gui opened.")
+        if((event.gui is GuiWorldSelection) or (event.gui is GuiMultiplayer)){
+            println("opening")
+            KamiGuiUpdateNotification.shouldOpen(event.gui)
+        }
     }
 }
