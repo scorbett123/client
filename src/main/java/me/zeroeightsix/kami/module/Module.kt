@@ -59,8 +59,8 @@ open class Module {
 
     val bind = setting("Bind", Bind(), { !annotation.alwaysEnabled })
     private val enabled = setting("Enabled", annotation.enabledByDefault || annotation.alwaysEnabled, { false })
-    private val visible = setting("Visible", annotation.showOnArray)
-    private val default = setting("Default", false, { settingList.isNotEmpty() })
+    private val visible = setting("Visible", annotation.showOnArray, description = "Show in active modules")
+    private val default = setting("Default", false, visibility = { settingList.isNotEmpty() }, description = "Reset to defaults")
     /* End of settings */
 
     /* Properties */

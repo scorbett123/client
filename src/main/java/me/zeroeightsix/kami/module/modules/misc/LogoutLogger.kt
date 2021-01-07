@@ -22,7 +22,7 @@ import org.kamiblue.event.listener.listener
     description = "Logs when a player leaves the game"
 )
 object LogoutLogger : Module() {
-    private val saveToFile = setting("SaveToFile", true)
+    private val saveToWaypoints = setting("SaveToWaypoints", true, description = "Create a new waypoint on player logout." )
     private val print = setting("PrintToChat", true)
 
     private val loggedPlayers = HashMap<GameProfile, BlockPos>()
@@ -46,7 +46,7 @@ object LogoutLogger : Module() {
                 for ((profile, pos) in loggedPlayers) {
                     if (connection.getPlayerInfo(profile.id) != null) continue
                     if (print.value) MessageSendHelper.sendChatMessage("${profile.name} logged out at ${pos.asString()}")
-                    if (saveToFile.value) WaypointManager.add(pos, "${profile.name} Logout Spot")
+                    if (saveToWaypoints.value) WaypointManager.add(pos, "${profile.name} Logout Spot")
                     toRemove.add(profile)
                 }
                 loggedPlayers.keys.removeAll(toRemove)

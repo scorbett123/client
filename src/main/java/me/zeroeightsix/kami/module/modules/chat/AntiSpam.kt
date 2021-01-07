@@ -18,28 +18,28 @@ import java.util.regex.Pattern
 )
 object AntiSpam : Module() {
     private val mode = setting("Mode", Mode.REPLACE)
-    private val replaceMode = setting("ReplaceMode", ReplaceMode.ASTERISKS, { mode.value == Mode.REPLACE })
+    private val replaceMode = setting("ReplaceMode", ReplaceMode.ASTERISKS, visibility = { mode.value == Mode.REPLACE }, description = "What to replace censored words with")
     private val page = setting("Page", Page.TYPE)
 
     /* Page One */
-    private val discordLinks = setting("Discord", true, { page.value == Page.TYPE })
-    private val slurs = setting("Slurs", true, { page.value == Page.TYPE })
-    private val swears = setting("Swears", false, { page.value == Page.TYPE })
-    private val automated = setting("Automated", true, { page.value == Page.TYPE })
-    private val ips = setting("ServerIps", true, { page.value == Page.TYPE })
-    private val specialCharEnding = setting("SpecialEnding", true, { page.value == Page.TYPE })
-    private val specialCharBegin = setting("SpecialBegin", true, { page.value == Page.TYPE })
-    private val greenText = setting("GreenText", false, { page.value == Page.TYPE })
-    private val fancyChat = setting("FancyChat", false, { page.value == Page.TYPE })
+    private val discordLinks = setting("Discord", true, visibility = { page.value == Page.TYPE }, description = "Censor discord links")
+    private val slurs = setting("Slurs", true, visibility = { page.value == Page.TYPE }, description = "Censor slurs")
+    private val swears = setting("Swears", false, visibility = { page.value == Page.TYPE }, description = "Censor swear words")
+    private val automated = setting("Automated", true, visibility = { page.value == Page.TYPE }, description = "Censor frequently used automated messages")
+    private val ips = setting("ServerIps", true, visibility = { page.value == Page.TYPE }, description = "Censor server IP adresses")
+    private val specialCharEnding = setting("SpecialEnding", true, visibility = { page.value == Page.TYPE }, description = "Censor messages with special characters at the end")
+    private val specialCharBegin = setting("SpecialBegin", true, visibility = { page.value == Page.TYPE }, description = "Censor messages with special characters at the beginning")
+    private val greenText = setting("GreenText", false, visibility = { page.value == Page.TYPE }, description = "Censor green text (This is a format that is normally used for storytelling or ridicule)")
+    private val fancyChat = setting("FancyChat", false, visibility = { page.value == Page.TYPE }, description = "Remove messages that contain fancy chat")
 
     /* Page Two */
-    private val aggressiveFiltering = setting("AggressiveFiltering", true, { page.value == Page.SETTINGS })
-    private val duplicates = setting("Duplicates", true, { page.value == Page.SETTINGS })
-    private val duplicatesTimeout = setting("DuplicatesTimeout", 30, 1..600, 5, { duplicates.value && page.value == Page.SETTINGS })
-    private val filterOwn = setting("FilterOwn", false, { page.value == Page.SETTINGS })
-    private val filterDMs = setting("FilterDMs", false, { page.value == Page.SETTINGS })
-    private val filterServer = setting("FilterServer", false, { page.value == Page.SETTINGS })
-    private val showBlocked = setting("ShowBlocked", ShowBlocked.LOG_FILE, { page.value == Page.SETTINGS })
+    private val aggressiveFiltering = setting("AggressiveFiltering", true, visibility = { page.value == Page.SETTINGS }, description = "Filter aggressively (Prefer false positive over false negative)")
+    private val duplicates = setting("Duplicates", true, visibility = { page.value == Page.SETTINGS }, description = "Remove duplicate messages")
+    private val duplicatesTimeout = setting("DuplicatesTimeout", 30, 1..600, 5, visibility = { duplicates.value && page.value == Page.SETTINGS }, description = "The maximum length of time between duplicate messages")
+    private val filterOwn = setting("FilterOwn", false, visibility = { page.value == Page.SETTINGS }, description = "Censor your own messages")
+    private val filterDMs = setting("FilterDMs", false, visibility = { page.value == Page.SETTINGS }, description = "Filter your Direct Messages to you")
+    private val filterServer = setting("FilterServer", false, visibility = { page.value == Page.SETTINGS }, description = "Filter messages from the server")
+    private val showBlocked = setting("ShowBlocked", ShowBlocked.LOG_FILE, visibility = { page.value == Page.SETTINGS }, description = "What to do with messages that have been blocked.")
 
     private enum class Mode {
         REPLACE, HIDE

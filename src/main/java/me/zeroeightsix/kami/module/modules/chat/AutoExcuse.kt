@@ -12,6 +12,7 @@ import net.minecraft.network.play.server.SPacketUpdateHealth
 import org.kamiblue.event.listener.listener
 import java.io.File
 
+
 @Module.Info(
     name = "AutoExcuse",
     description = "Makes an excuse for you when you die",
@@ -19,7 +20,7 @@ import java.io.File
     modulePriority = 500
 )
 object AutoExcuse : Module() {
-    private val mode = setting("Mode", Mode.INTERNAL)
+    private val mode = setting("Mode", Mode.INTERNAL, description = "Use custom messages")
 
     private enum class Mode {
         INTERNAL, EXTERNAL
