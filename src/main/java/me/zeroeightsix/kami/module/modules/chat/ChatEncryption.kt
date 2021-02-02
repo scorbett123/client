@@ -22,14 +22,14 @@ import kotlin.collections.HashMap
 
 // TODO: Add proper RSA encryption
 internal object ChatEncryption : Module(
-    name = "ChatEncryption",
+    name = "Chat Encryption",
     description = "Encrypts and decrypts chat messages",
     category = Category.CHAT,
     modulePriority = -69420
 ) {
     private val commands by setting("Commands", false)
-    private val self by setting("DecryptOwn", true)
-    private var keySetting by setting("KeySetting", "DefaultKey")
+    private val self by setting("Decrypt Own", true)
+    private var keySetting by setting("Key Setting", "DefaultKey")
     val delimiter by setting("Delimiter", "%", consumer = { prev: String, value: String ->
         if (value.length == 1 && !chars.contains(value.first())) value else prev
     })

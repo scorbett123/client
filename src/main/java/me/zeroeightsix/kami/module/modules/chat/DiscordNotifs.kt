@@ -25,15 +25,15 @@ internal object DiscordNotifs : Module(
     private val timeout = setting("Timeout", true)
     private val timeoutTime = setting("Seconds", 10, 0..120, 5, { timeout.value })
     private val time = setting("Timestamp", true)
-    private val importantPings = setting("ImportantPings", false)
-    private val disconnect = setting("DisconnectMsgs", true)
-    private val all = setting("AllMessages", false)
+    private val importantPings = setting("Important Pings", false)
+    private val disconnect = setting("Disconnect Msgs", true)
+    private val all = setting("All Messages", false)
     private val direct = setting("DMs", true, { !all.value })
-    private val queue = setting("QueuePosition", true, { !all.value })
-    private val restart = setting("RestartMsgs", true, { !all.value })
+    private val queue = setting("Queue Position", true, { !all.value })
+    private val restart = setting("Restart Msgs", true, { !all.value })
 
     val url = setting("URL", "unchanged")
-    val pingID = setting("PingID", "unchanged")
+    val pingID = setting("Ping ID", "unchanged")
     val avatar = setting("Avatar", KamiMod.GITHUB_LINK + "/assets/raw/assets/assets/icons/kamiGithub.png")
 
     private val server: String get() = mc.currentServerData?.serverIP ?: "the server"
