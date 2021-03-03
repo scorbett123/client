@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent
 import org.kamiblue.client.event.events.RenderOverlayEvent
 import org.kamiblue.client.gui.rgui.WindowComponent
 import org.kamiblue.client.gui.rgui.windows.ColorPicker
+import org.kamiblue.client.gui.rgui.windows.GuiSwitcher
 import org.kamiblue.client.gui.rgui.windows.SettingWindow
 import org.kamiblue.client.mixin.extension.listShaders
 import org.kamiblue.client.module.modules.client.ClickGUI
@@ -85,6 +86,7 @@ abstract class AbstractKamiGui<S : SettingWindow<*>, E : Any> : GuiScreen() {
 
     init {
         mc = Wrapper.minecraft
+        windowList.add(GuiSwitcher)
         windowList.add(ColorPicker)
 
         safeListener<TickEvent.ClientTickEvent> { event ->
